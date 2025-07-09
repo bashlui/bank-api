@@ -1,5 +1,107 @@
 <template>
-  <div class="min-h-screen bg-gray-50">
+  <div c    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+      <div v-if="loading" class="text-center">
+        <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600"></div>
+        <p class="mt-2 text-gray-600">Loading dashboard...</p>
+      </div>
+
+      <div v-else-if="error" class="text-center text-red-600">
+        {{ error }}
+      </div>
+
+      <div v-else class="px-4 py-6 sm:px-0">
+        <!-- Welcome Section -->
+        <div class="bg-white overflow-hidden shadow rounded-lg mb-6">
+          <div class="px-4 py-5 sm:p-6">
+            <h2 class="text-lg font-medium text-gray-900 mb-2">
+              Welcome back, {{ dashboardData.user.full_name }}!
+            </h2>
+            <p class="text-sm text-gray-600">
+              Account created: {{ formatDate(dashboardData.user.created_at) }}
+            </p>
+          </div>
+        </div>
+
+        <!-- Account Summary -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
+          <div 
+            v-for="account in dashboardData.accounts" 
+            :key="account.id"
+            class="bg-white overflow-hidden shadow rounded-lg"
+          >
+            <div class="px-4 py-5 sm:p-6">
+              <div class="flex items-center">
+                <div class="flex-shrink-0">
+                  <div class="w-8 h-8 bg-indigo-500 rounded-full flex items-center justify-center">
+                    <span class="text-white text-sm font-medium">{{ account.account_type.charAt(0) }}</span>
+                  </div>
+                </div>
+                <div class="ml-5 w-0 flex-1">
+                  <dl>
+                    <dt class="text-sm font-medium text-gray-500 truncate">
+                      {{ account.account_type }} Account
+                    </dt>
+                    <dd class="text-lg font-medium text-gray-900">
+                      ${{ formatCurrency(account.balance) }}
+                    </dd>
+                  </dl>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recent Transactions -->
+        <div class="bg-white shadow overflow-hidden sm:rounded-md">
+          <div class="px-4 py-5 sm:px-6">
+            <h3 class="text-lg leading-6 font-medium text-gray-900">Recent Transactions</h3>
+            <p class="mt-1 max-w-2xl text-sm text-gray-500">Your latest account activity</p>
+          </div>
+          <ul class="divide-y divide-gray-200">
+            <li v-for="transaction in dashboardData.recent_transactions" :key="transaction.id" class="px-4 py-4 sm:px-6">
+              <div class="flex items-center justify-between">
+                <div class="flex items-center">
+                  <div class="flex-shrink-0">
+                    <div 
+                      :class="[
+                        'w-8 h-8 rounded-full flex items-center justify-center',
+                        transaction.transaction_type === 'deposit' ? 'bg-green-100' : 
+                        transaction.transaction_type === 'withdrawal' ? 'bg-red-100' : 'bg-blue-100'
+                      ]"
+                    >
+                      <span 
+                        :class="[
+                          'text-sm font-medium',
+                          transaction.transaction_type === 'deposit' ? 'text-green-800' : 
+                          transaction.transaction_type === 'withdrawal' ? 'text-red-800' : 'text-blue-800'
+                        ]"
+                      >
+                        {{ transaction.transaction_type.charAt(0).toUpperCase() }}
+                      </span>
+                    </div>
+                  </div>
+                  <div class="ml-4">
+                    <div class="text-sm font-medium text-gray-900">
+                      {{ transaction.description || transaction.transaction_type }}
+                    </div>
+                    <div class="text-sm text-gray-500">
+                      {{ formatDate(transaction.created_at) }}
+                      <span v-if="transaction.sender_username || transaction.receiver_username">
+                        • {{ transaction.sender_username === dashboardData.user.username ? 'To: ' + transaction.receiver_username : 'From: ' + transaction.sender_username }}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <div class="text-sm font-medium" :class="getTransactionAmountClass(transaction)">
+                  {{ getTransactionAmountDisplay(transaction) }}
+                </div>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </main>g-gray-50">
     <!-- Navigation -->
     <nav class="bg-white shadow-lg">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
