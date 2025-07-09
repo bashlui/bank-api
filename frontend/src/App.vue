@@ -3,14 +3,11 @@
 </script>
 
 <template>
-  <div id="app">
+  <div id="app" class="w-full min-h-screen">
     <router-view />
   </div>
 </template>
 
-<style scoped>
-#app {
-  width: 100%;
-  height: 100vh;
-}
+<style>
+/* Remove any conflicting styles, let Tailwind handle everything */
 </style>
