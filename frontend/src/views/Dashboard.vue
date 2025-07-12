@@ -1,5 +1,34 @@
 <template>
-  <div c    <!-- Main Content -->
+  <div class="min-h-screen bg-gray-50">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-lg">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between h-16">
+          <div class="flex items-center">
+            <h1 class="text-xl font-semibold text-gray-900">Bank API</h1>
+          </div>
+          <div class="flex items-center space-x-4">
+            <router-link to="/dashboard" class="text-gray-900 hover:text-indigo-600 px-3 py-2 rounded-md text-sm font-medium">
+              Dashboard
+            </router-link>
+            <router-link to="/accounts" class="text-gray-500 hover:text-indigo-600 px-3 py-2 rounded-md text-sm font-medium">
+              Accounts
+            </router-link>
+            <router-link to="/transactions" class="text-gray-500 hover:text-indigo-600 px-3 py-2 rounded-md text-sm font-medium">
+              Transactions
+            </router-link>
+            <router-link to="/transfer" class="text-gray-500 hover:text-indigo-600 px-3 py-2 rounded-md text-sm font-medium">
+              Transfer
+            </router-link>
+            <button @click="logout" class="text-gray-500 hover:text-red-600 px-3 py-2 rounded-md text-sm font-medium">
+              Logout
+            </button>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Main Content -->
     <main class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
       <div v-if="loading" class="text-center">
         <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600"></div>
@@ -250,22 +279,100 @@
 </template>
 
 <script>
-import api from '../services/api'
+// import api from '../services/api' // TODO: Uncomment when API is ready
 
 export default {
   name: 'Dashboard',
   data() {
     return {
-      dashboardData: null,
-      loading: true,
+      dashboardData: {
+        user: {
+          full_name: 'Demo User',
+          username: 'demo_user',
+          created_at: '2024-01-15T10:30:00Z'
+        },
+        accounts: [
+          {
+            id: 1,
+            account_number: 'ACC001234567',
+            account_type: 'checking',
+            balance: 2500.75,
+            is_active: true
+          },
+          {
+            id: 2,
+            account_number: 'ACC001234568',
+            account_type: 'savings',
+            balance: 15000.00,
+            is_active: true
+          },
+          {
+            id: 3,
+            account_number: 'ACC001234569',
+            account_type: 'credit',
+            balance: -850.25,
+            is_active: true
+          }
+        ],
+        recent_transactions: [
+          {
+            id: 1,
+            transaction_type: 'deposit',
+            amount: 1000.00,
+            description: 'Salary Deposit',
+            created_at: '2024-07-10T14:30:00Z',
+            sender_username: null,
+            receiver_username: 'demo_user'
+          },
+          {
+            id: 2,
+            transaction_type: 'withdrawal',
+            amount: 150.00,
+            description: 'ATM Withdrawal',
+            created_at: '2024-07-09T16:45:00Z',
+            sender_username: 'demo_user',
+            receiver_username: null
+          },
+          {
+            id: 3,
+            transaction_type: 'transfer',
+            amount: 300.00,
+            description: 'Transfer to John Doe',
+            created_at: '2024-07-08T11:20:00Z',
+            sender_username: 'demo_user',
+            receiver_username: 'john_doe'
+          },
+          {
+            id: 4,
+            transaction_type: 'deposit',
+            amount: 50.00,
+            description: 'Interest Payment',
+            created_at: '2024-07-07T09:00:00Z',
+            sender_username: null,
+            receiver_username: 'demo_user'
+          }
+        ]
+      },
+      loading: false,
       error: null
     }
   },
   async mounted() {
-    await this.fetchDashboardData()
+    // TODO: Replace with actual API call when ready
+    // await this.fetchDashboardData()
+    this.simulateLoading()
   },
   methods: {
+    simulateLoading() {
+      this.loading = true
+      // Simulate API loading time
+      setTimeout(() => {
+        this.loading = false
+      }, 1000)
+    },
     async fetchDashboardData() {
+      // TODO: Uncomment when API is ready
+      /*
       this.loading = true
       this.error = null
 
@@ -277,6 +384,7 @@ export default {
       } finally {
         this.loading = false
       }
+      */
     },
     logout() {
       localStorage.removeItem('token')
