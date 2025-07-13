@@ -1,28 +1,15 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import Login from '../views/Login.vue'
-import Dashboard from '../views/Dashboard.vue'
-import Register from '../views/Register.vue'
+import Dashboard from '../views/Dashboard.vue' // Import Dashboard component
 
 const routes = [
   {
     path: '/',
-    redirect: '/login'
-  },
-  {
-    path: '/login',
-    name: 'Login',
-    component: Login
-  },
-  {
-    path: '/register',
-    name: 'Register',
-    component: Register
+    redirect: '/dashboard'  // Skip login, go directly to dashboard
   },
   {
     path: '/dashboard',
     name: 'Dashboard',
     component: Dashboard
-    // meta: { requiresAuth: true } // TODO: Uncomment when authentication is ready
   }
 ]
 
